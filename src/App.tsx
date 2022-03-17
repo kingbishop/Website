@@ -1,9 +1,9 @@
 import React from 'react';
-import { Link, Route, Routes, useLocation } from 'react-router-dom';
+import { Route, Routes, useLocation } from 'react-router-dom';
 
 import Home from './pages/home';
 
-import { AnimatePresence, motion } from 'framer-motion'
+import { AnimatePresence} from 'framer-motion'
 
 
 function App() {

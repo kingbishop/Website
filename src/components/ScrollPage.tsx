@@ -1,4 +1,4 @@
-import React, { Component, useState, useEffect, WheelEvent, ReactNode, ReactElement, useRef } from 'react'
+import React, { Component, useState, useEffect, WheelEvent, ReactElement, useRef } from 'react'
 
 import '../styles/scrollpage.css'
 
@@ -51,7 +51,7 @@ const ScrollPage = (props: PageProps) => {
 
     function tick() {
         let now = Date.now()
-        let change = now - lastUpdate == 0 ? 1 : now - lastUpdate
+        let change = now - lastUpdate === 0 ? 1 : now - lastUpdate
         let dt = 1 / ((change) / (1000 / 60))
         
         deltaTime = dt
@@ -85,9 +85,9 @@ const ScrollPage = (props: PageProps) => {
 
         setSwapPage(bottom <= height && bottom >= height - 10)
        
-        if (swapPage && !prevSwap && direction == "DOWN") {
+        if (swapPage && !prevSwap && direction === "DOWN") {
             incrementPageIndex()
-        } else if (!swapPage && prevSwap && direction == "UP") {
+        } else if (!swapPage && prevSwap && direction === "UP") {
             decrementPageIndex()
         }
 
@@ -99,7 +99,7 @@ const ScrollPage = (props: PageProps) => {
             target.style.opacity = String(opacity)
         }
 
-        if (swapPage != prevSwap) {
+        if (swapPage !== prevSwap) {
             setPrevSwap(swapPage)
         }
 
@@ -107,12 +107,10 @@ const ScrollPage = (props: PageProps) => {
     }
 
     useEffect(() => {
-        lastUpdate = Date.now()
         tick()
     },[deltaY])
 
     useEffect(() => {
-        lastUpdate = Date.now()
         setInterval(tick, 1000)
     }, [])
 

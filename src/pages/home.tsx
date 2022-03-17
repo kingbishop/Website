@@ -28,7 +28,7 @@ function Home() {
                 </div>
 
                 <div>
-                    <img src='profile.jpeg'/>
+                    <img src='profile.jpeg' alt=''/>
                 </div>
             </div>
             
@@ -67,7 +67,7 @@ function Home() {
 
 
                 <div className='avatar' >
-                    <img src='Avatar.png' />
+                    <img src='Avatar.png' alt=''/>
                 </div>
 
 
