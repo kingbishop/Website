@@ -1,4 +1,4 @@
-import React, { Component, useState, useEffect, WheelEvent, ReactElement, useRef } from 'react'
+import React, { useState, useEffect, WheelEvent, ReactElement, useRef } from 'react'
 
 import '../styles/scrollpage.css'
 
@@ -108,11 +108,11 @@ const ScrollPage = (props: PageProps) => {
 
     useEffect(() => {
         tick()
-    },[deltaY])
+    },[deltaY]) // eslint-disable-line react-hooks/exhaustive-deps
 
     useEffect(() => {
         setInterval(tick, 1000)
-    }, [])
+    }, []) // eslint-disable-line react-hooks/exhaustive-deps
 
 
     return (
