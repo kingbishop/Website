@@ -1,0 +1,83 @@
+@font-face {
+    font-family: 'Data';
+    src: url('../../public/data-latin.ttf');
+}
+
+body {
+    overflow: hidden;
+    background-image: radial-gradient(rgb(0, 141, 31),rgb(2, 1, 2));
+    width: 100vw;
+    height: 100vh;
+} 
+
+.font-data > * {
+    font-family: 'Data';
+}
+
+
+.flex-center-row {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    width: 100vw;
+    height: 100vh;
+    max-width: 100%;
+    flex-grow: 1;
+    position: relative;
+    opacity: 1
+}
+
+.neon-hover > * :hover {
+    text-shadow:
+    0 0 7px #fff,
+    0 0 10px #fff,
+    0 0 21px #fff,
+    0 0 102px #0fa,
+    0 0 151px #0fa;
+}
+
+.flex-center-row > * :hover {
+    text-shadow:
+    0 0 7px #fff,
+    0 0 10px #fff,
+    0 0 21px #fff,
+    0 0 102px #0fa,
+    0 0 151px #0fa;
+}
+
+.flex-center-row > * {
+    padding: 2.5%;
+    margin: 2.5%;
+    /* border-radius: 10px;
+    border-style: solid;
+    border-color: black; */
+}
+
+.avatar {
+    width: 100vw;
+    height: 30%;
+    bottom: -5%;
+    position: absolute;
+    overflow: hidden;
+}
+
+.avatar img {
+    position: relative;
+    float: right;
+}
+
+
+.bottom-note {
+    position: absolute;
+    text-align: center;
+    z-index: 100;
+    width: 100vw;
+    bottom: 0;
+}
+
+
+.bottom-note p {
+    position: relative;
+    align-self: center;
+}
