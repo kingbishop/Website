@@ -64,7 +64,7 @@ const ScrollPage = (props: PageProps) => {
         let target = pageRef.current
         setDeltaY(event.deltaY)
         let direction = deltaY < 0 ? "UP" : "DOWN"
-        let speed = ceiling(deltaY * deltaTime, -1, 1) * (1 / 60)
+        let speed = direction === "UP" ? 0.025 : -0.025
         let height = window.innerHeight / 2
         
         let newBottom = bottom - (speed * height)
