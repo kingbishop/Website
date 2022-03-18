@@ -60,7 +60,7 @@ const ScrollPage = (props: PageProps) => {
 
         let target = pageRef.current
         let direction = deltaY.current > 0 ? "UP" : "DOWN"
-        let speed = deltaY.current * 0.000055
+        let speed = direction === "UP" ? 0.015 : -0.015
 
         let height = window.innerHeight / 2
 
