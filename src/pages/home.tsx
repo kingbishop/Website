@@ -76,7 +76,7 @@ function Home() {
             <div className='bottom-note font-data neon-hover'>
                 <div>
                     <p>
-                        SCROLL TO LIVE!
+                        CLICK & DRAG TO LIVE!
                     </p>
                 </div>
 

@@ -1,4 +1,4 @@
-import React, { useState, useEffect, WheelEvent, ReactElement, useRef } from 'react'
+import React, { useState, useEffect, ReactElement, useRef } from 'react'
 
 import '../styles/scrollpage.css'
 
@@ -10,16 +10,22 @@ const ScrollPage = (props: PageProps) => {
 
 
     const pageRef = useRef<HTMLDivElement>(null)
-    let lastUpdate = Date.now()
-    let deltaTime = 0
-    const [deltaY, setDeltaY] = useState(0)
-    const [bottom, setBottom] = useState(0)
+
+
+
     const [opacity, setOpacity] = useState(1)
     const [pageIndex, setPageIndex] = useState(0)
     const [swapPage, setSwapPage] = useState(false)
     const [prevSwap, setPrevSwap] = useState(false)
+
     const [pageState, setPageState] = useState(props.pages[0])
-   
+
+    const [downY, setDownY] = useState(0)
+    const [deltaY, setDeltaY] = useState(0)
+    const [bottom, setBottom] = useState(0)
+    const mouseDown = useRef(false)
+
+
 
     function ceiling(num: number, min: number, max: number) {
         return Math.min(Math.max(num, min), max);
@@ -30,7 +36,7 @@ const ScrollPage = (props: PageProps) => {
         if (newIndex < props.pages.length) {
             setPageIndex(newIndex)
             setPageState(props.pages[newIndex])
-        }else {
+        } else {
             setPageIndex(0)
             setPageState(props.pages[0])
         }
@@ -41,50 +47,42 @@ const ScrollPage = (props: PageProps) => {
         if (newIndex >= 0) {
             setPageIndex(newIndex)
             setPageState(props.pages[newIndex])
-        }else{
-            setPageIndex(props.pages.length-1)
-            setPageState(props.pages[props.pages.length-1])
+        } else {
+            setPageIndex(props.pages.length - 1)
+            setPageState(props.pages[props.pages.length - 1])
         }
 
 
     }
 
-    function tick() {
-        let now = Date.now()
-        let change = now - lastUpdate === 0 ? 1 : now - lastUpdate
-        let dt = 1 / ((change) / (1000 / 60))
-        
-        deltaTime = dt
-        lastUpdate = now
-    }
-
-    function handleScroll(event: WheelEvent) {
+    function handleScroll() {
 
 
         let target = pageRef.current
-        setDeltaY(event.deltaY)
-        let direction = deltaY < 0 ? "UP" : "DOWN"
-        let speed = direction === "UP" ? 0.025 : -0.025
+        let direction = deltaY > 0 ? "UP" : "DOWN"
+        let speed = deltaY * 0.000055
+
         let height = window.innerHeight / 2
-        
+
         let newBottom = bottom - (speed * height)
 
-        if(newBottom + height < height){
+        if (newBottom + height < height) {
             let newOpacity = ceiling(opacity - speed, 0, 1)
             setOpacity(newOpacity)
-        }else {
+        } else {
             let newOpacity = ceiling(opacity + speed, 0, 1)
             setOpacity(newOpacity)
         }
-       
+
+
 
         newBottom = newBottom < -height ? height : newBottom > height ? -height : newBottom
-        
+
 
         setBottom(newBottom)
 
         setSwapPage(bottom <= height && bottom >= height - 10)
-       
+
         if (swapPage && !prevSwap && direction === "DOWN") {
             incrementPageIndex()
         } else if (!swapPage && prevSwap && direction === "UP") {
@@ -106,17 +104,62 @@ const ScrollPage = (props: PageProps) => {
 
     }
 
-    useEffect(() => {
-        tick()
-    },[deltaY]) // eslint-disable-line react-hooks/exhaustive-deps
+
+
+    function move(event: PointerEvent) {
+        setDeltaY(event.clientY - downY)
+
+        handleScroll()
+    }
+
+
+
+
+    function mouseDownEvent(e: any) {
+        let event = e as PointerEvent
+
+
+        mouseDown.current = true
+
+        setDownY(event.clientY)
+        console.log("DOWN")
+
+        event.preventDefault()
+        return false
+    }
+
+    function mouseMoveEvent(e: any) {
+        let event = e as PointerEvent
+
+        if (mouseDown.current) {
+            move(event)
+        }
+
+        event.preventDefault()
+    }
+
+
+    function mouseUpEvent(e: any) {
+        let event = e as PointerEvent
+
+        mouseDown.current = false
+
+        console.log("UP")
+        event.preventDefault()
+    }
+
+
 
     useEffect(() => {
-        setInterval(tick, 1000)
+
+        window.ondragstart = function () { return false }
+        window.onselectstart = function () { return false }
+
     }, []) // eslint-disable-line react-hooks/exhaustive-deps
 
 
     return (
-        <div className='scroll-body' style={{ width: '100vw', height: '100vh' }} onWheel={handleScroll}>
+        <div className='scroll-body' style={{ width: '125vw', height: '125vh' }} onPointerDown={mouseDownEvent} onPointerUp={mouseUpEvent} onPointerMove={mouseMoveEvent} onPointerLeave={mouseUpEvent}>
             <div className='scroll-page' ref={pageRef}>{pageState}</div>
         </div>
     )
