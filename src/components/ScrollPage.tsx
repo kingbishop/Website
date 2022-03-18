@@ -122,7 +122,6 @@ const ScrollPage = (props: PageProps) => {
         mouseDown.current = true
 
         setDownY(event.clientY)
-        console.log("DOWN")
 
         event.preventDefault()
         return false
@@ -143,8 +142,6 @@ const ScrollPage = (props: PageProps) => {
         let event = e as PointerEvent
 
         mouseDown.current = false
-
-        console.log("UP")
         event.preventDefault()
     }
 
