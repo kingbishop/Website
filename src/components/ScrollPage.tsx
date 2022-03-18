@@ -14,15 +14,14 @@ const ScrollPage = (props: PageProps) => {
 
 
     const [opacity, setOpacity] = useState(1)
-    const [pageIndex, setPageIndex] = useState(0)
-    const [swapPage, setSwapPage] = useState(false)
-    const [prevSwap, setPrevSwap] = useState(false)
-
     const [pageState, setPageState] = useState(props.pages[0])
+    const [pageIndex, setPageIndex] = useState(0)
 
-    const [downY, setDownY] = useState(0)
-    const [deltaY, setDeltaY] = useState(0)
-    const [bottom, setBottom] = useState(0)
+    const swapPage = useRef(false)
+    const prevSwap = useRef(false)
+    const downY = useRef(0)
+    const deltaY = useRef(0)
+    const bottom = useRef(0)
     const mouseDown = useRef(false)
 
 
@@ -59,12 +58,12 @@ const ScrollPage = (props: PageProps) => {
 
 
         let target = pageRef.current
-        let direction = deltaY > 0 ? "UP" : "DOWN"
-        let speed = deltaY * 0.000055
+        let direction = deltaY.current > 0 ? "UP" : "DOWN"
+        let speed = deltaY.current * 0.000055
 
         let height = window.innerHeight / 2
 
-        let newBottom = bottom - (speed * height)
+        let newBottom = bottom.current - (speed * height)
 
         if (newBottom + height < height) {
             let newOpacity = ceiling(opacity - speed, 0, 1)
@@ -79,13 +78,13 @@ const ScrollPage = (props: PageProps) => {
         newBottom = newBottom < -height ? height : newBottom > height ? -height : newBottom
 
 
-        setBottom(newBottom)
+        bottom.current = newBottom
 
-        setSwapPage(bottom <= height && bottom >= height - 10)
+        swapPage.current = bottom.current <= height && bottom.current >= height - 10
 
-        if (swapPage && !prevSwap && direction === "DOWN") {
+        if (swapPage.current && !prevSwap.current && direction === "DOWN") {
             incrementPageIndex()
-        } else if (!swapPage && prevSwap && direction === "UP") {
+        } else if (!swapPage.current && prevSwap.current && direction === "UP") {
             decrementPageIndex()
         }
 
@@ -97,8 +96,8 @@ const ScrollPage = (props: PageProps) => {
             target.style.opacity = String(opacity)
         }
 
-        if (swapPage !== prevSwap) {
-            setPrevSwap(swapPage)
+        if (swapPage.current !== prevSwap.current) {
+            prevSwap.current = swapPage.current
         }
 
 
@@ -107,7 +106,7 @@ const ScrollPage = (props: PageProps) => {
 
 
     function move(event: PointerEvent) {
-        setDeltaY(event.clientY - downY)
+        deltaY.current = event.clientY - downY.current
 
         handleScroll()
     }
@@ -121,8 +120,8 @@ const ScrollPage = (props: PageProps) => {
 
         mouseDown.current = true
 
-        setDownY(event.clientY)
-
+        //setDownY(event.clientY)
+        downY.current = event.clientY
         event.preventDefault()
         return false
     }
