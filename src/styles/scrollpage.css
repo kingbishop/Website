@@ -8,7 +8,7 @@
 }
 
 .scroll-page {
-    display: flex;
+    display: inline-block;
     align-items: center;
     justify-content: center;
     width: 100vw;

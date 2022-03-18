@@ -13,7 +13,7 @@ const ScrollPage = (props: PageProps) => {
 
 
 
-    const [opacity, setOpacity] = useState(1)
+    
     const [pageState, setPageState] = useState(props.pages[0])
     const [pageIndex, setPageIndex] = useState(0)
 
@@ -23,6 +23,7 @@ const ScrollPage = (props: PageProps) => {
     const deltaY = useRef(0)
     const bottom = useRef(0)
     const mouseDown = useRef(false)
+    const opacity = useRef(1)
 
 
 
@@ -66,11 +67,11 @@ const ScrollPage = (props: PageProps) => {
         let newBottom = bottom.current - (speed * height)
 
         if (newBottom + height < height) {
-            let newOpacity = ceiling(opacity - speed, 0, 1)
-            setOpacity(newOpacity)
+            let newOpacity = ceiling(opacity.current - speed, 0, 1)
+            opacity.current = newOpacity
         } else {
-            let newOpacity = ceiling(opacity + speed, 0, 1)
-            setOpacity(newOpacity)
+            let newOpacity = ceiling(opacity.current + speed, 0, 1)
+            opacity.current = newOpacity
         }
 
 
@@ -91,9 +92,8 @@ const ScrollPage = (props: PageProps) => {
 
 
         if (target) {
-            //target.style.opacity = String(opacity)
-            target.style.bottom = String(newBottom) + "px"
-            target.style.opacity = String(opacity)
+            target.style.transform = `translateY(${bottom.current}px)`
+            target.style.opacity = String(opacity.current)
         }
 
         if (swapPage.current !== prevSwap.current) {
@@ -112,15 +112,12 @@ const ScrollPage = (props: PageProps) => {
     }
 
 
-
-
     function mouseDownEvent(e: any) {
         let event = e as PointerEvent
 
 
         mouseDown.current = true
 
-        //setDownY(event.clientY)
         downY.current = event.clientY
         event.preventDefault()
         return false
@@ -139,7 +136,7 @@ const ScrollPage = (props: PageProps) => {
 
     function mouseUpEvent(e: any) {
         let event = e as PointerEvent
-
+        
         mouseDown.current = false
         event.preventDefault()
     }
@@ -151,7 +148,7 @@ const ScrollPage = (props: PageProps) => {
         window.ondragstart = function () { return false }
         window.onselectstart = function () { return false }
 
-    }, []) // eslint-disable-line react-hooks/exhaustive-deps
+    }, [])
 
 
     return (
